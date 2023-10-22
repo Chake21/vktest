@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "vktest/api";
+
+
+service VKTest {
+
+  rpc CountOfUsers (CountOfUsersRequest) returns
+      (CountOfUsersResponse);
+
+  rpc StreamCountOfUsers (CountOfUsersRequest) returns
+      (stream CountOfUsersResponse);
+}
+
+message CountOfUsersRequest {
+   repeated int32 array = 1;
+   int32 ageFrom = 2;
+   int32 ageTo = 3;
+}
+
+message CountOfUsersResponse {
+  bool found = 1;
+  uint64 count = 2;
+}
