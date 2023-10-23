@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"os"
 	"testing"
 
 	"vktest/internal"
@@ -22,8 +21,8 @@ func connection(target string) *grpc.ClientConn {
 }
 
 var (
-	port   = os.Getenv("SERVICE_PORT")
-	conn   = connection("localhost:" + port)
+	//port   = os.Getenv("SERVICE_PORT")
+	conn   = connection("localhost:15000")
 	client = api.NewVKTestClient(conn)
 	ctx    = context.Background()
 )

@@ -80,6 +80,9 @@ func (s *Server) calculateCountOfUsers(array []int32, ageFrom, ageTo int32) (boo
 }
 
 func arrayPartitioner(array []int32, countOfPartitions internal.PartitionsCount) [][]int32 {
+	if len(array) < 10 {
+		return [][]int32{array}
+	}
 	var res [][]int32
 	length := int32(len(array))
 	size := length / countOfPartitions.Count

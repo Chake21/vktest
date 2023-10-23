@@ -60,11 +60,11 @@ func TestStreamBelowZero(t *testing.T) {
 
 	cli, err := client.StreamCountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cant read from stream! ", err)
 	}
 	res2, err2 := cli.Recv()
 	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
 	if res2.Count != 4 {
 		t.Fatal("Incorrect calculation!")
@@ -80,11 +80,11 @@ func TestStreamInversive(t *testing.T) {
 	}
 	cli, err := client.StreamCountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cant read from stream! ", err)
 	}
 	res2, err2 := cli.Recv()
 	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
 	if res2.Count != 4 {
 		t.Fatal("Result of calculation is incorrect!")
@@ -92,16 +92,18 @@ func TestStreamInversive(t *testing.T) {
 }
 
 func TestStreamEmptyArray(t *testing.T) {
-	t.Parallel()
-
 	req := api.CountOfUsersRequest{
 		Array:   []int32{},
 		AgeFrom: 8,
 		AgeTo:   2,
 	}
-	_, err := client.StreamCountOfUsers(ctx, &req)
-	if err == nil {
-		t.Fatal("Error is empty! Expected NoArrayErr!")
+	res, err := client.StreamCountOfUsers(ctx, &req)
+	if err != nil {
+		t.Fatal("cannot read from stream!")
+	}
+	_, err2 := res.Recv()
+	if err2 == nil {
+		t.Fatal("Error is empty!")
 	}
 }
 
@@ -115,11 +117,11 @@ func TestStreamZeroLength(t *testing.T) {
 	}
 	cli, err := client.StreamCountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cant read from stream! ", err)
 	}
 	res2, err2 := cli.Recv()
 	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
 	if res2.Found {
 		t.Fatal("Founded result, expected no one!")
@@ -139,11 +141,11 @@ func TestStreamZeroLengthEqualToNumberInArray(t *testing.T) {
 	}
 	cli, err := client.StreamCountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cant read from stream! ", err)
 	}
 	res2, err2 := cli.Recv()
 	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
 	if !res2.Found {
 		t.Fatal("Found nothing! Expected at least something!")
@@ -161,11 +163,11 @@ func TestStreamNegative(t *testing.T) {
 	}
 	cli, err := client.StreamCountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cant read from stream! ", err)
 	}
 	res2, err2 := cli.Recv()
 	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
@@ -184,11 +186,11 @@ func TestStreamSearchLefterThenArraysBorder(t *testing.T) {
 	}
 	cli, err := client.StreamCountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cant read from stream! ", err)
 	}
 	res2, err2 := cli.Recv()
 	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
@@ -207,11 +209,11 @@ func TestStreamSearchRighterThenArraysBorder(t *testing.T) {
 	}
 	cli, err := client.StreamCountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cant read from stream! ", err)
 	}
 	res2, err2 := cli.Recv()
 	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
