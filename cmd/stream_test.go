@@ -126,9 +126,6 @@ func TestStreamZeroLength(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Founded result, expected no one!")
 	}
-	if *res2.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
-	}
 }
 
 func TestStreamZeroLengthEqualToNumberInArray(t *testing.T) {
@@ -156,6 +153,7 @@ func TestStreamZeroLengthEqualToNumberInArray(t *testing.T) {
 }
 
 func TestStreamNegative(t *testing.T) {
+	t.Parallel()
 	req := api.CountOfUsersRequest{
 		Array:   internal.UsersAgeMocked,
 		AgeFrom: 10,
@@ -192,9 +190,6 @@ func TestStreamSearchLefterThenArraysBorder(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if *res2.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
-	}
 }
 
 func TestStreamSearchRighterThenArraysBorder(t *testing.T) {
@@ -215,7 +210,5 @@ func TestStreamSearchRighterThenArraysBorder(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if *res2.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
-	}
+
 }

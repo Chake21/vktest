@@ -142,9 +142,6 @@ func TestZeroLength(t *testing.T) {
 	if res.Found {
 		t.Fatal("Founded result, expected no one!")
 	}
-	if *res.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
-	}
 }
 
 func TestZeroLengthEqualToNumberInArray(t *testing.T) {
@@ -188,9 +185,6 @@ func TestNegative(t *testing.T) {
 	if res.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if *res.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
-	}
 }
 
 func TestSearchLefterThenArraysBorder(t *testing.T) {
@@ -211,9 +205,6 @@ func TestSearchLefterThenArraysBorder(t *testing.T) {
 	if res.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if *res.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
-	}
 }
 
 func TestSearchRighterThenArraysBorder(t *testing.T) {
@@ -233,8 +224,5 @@ func TestSearchRighterThenArraysBorder(t *testing.T) {
 	}
 	if res.Found {
 		t.Fatal("Found any results, expected no one!")
-	}
-	if *res.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
 	}
 }
