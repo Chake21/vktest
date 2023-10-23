@@ -86,6 +86,22 @@ func TestInversive(t *testing.T) {
 	}
 }
 
+func TestEmptyArray(t *testing.T) {
+	t.Parallel()
+	var (
+		err error
+	)
+	req := api.CountOfUsersRequest{
+		Array:   []int32{},
+		AgeFrom: 8,
+		AgeTo:   2,
+	}
+	_, err = client.CountOfUsers(ctx, &req)
+	if err == nil {
+		t.Fatal("Error is empty!")
+	}
+}
+
 func TestZeroLength(t *testing.T) {
 	t.Parallel()
 	var (

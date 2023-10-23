@@ -1,6 +1,9 @@
 package internal
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 type IntArray struct {
 	data  []int32
@@ -61,4 +64,12 @@ func (arr *BoolArray) AnyTrue() bool {
 		}
 	}
 	return false
+}
+
+type CustomError struct {
+	Message string
+}
+
+func (e *CustomError) Error() string {
+	return fmt.Sprintf("CustomError: %s", e.Message)
 }

@@ -12,6 +12,9 @@ type Server struct {
 }
 
 func (s *Server) CountOfUsers(ctx context.Context, req *api.CountOfUsersRequest) (*api.CountOfUsersResponse, error) {
+	if len(req.Array) == 0 {
+		return nil, &internal.CustomError{Message: "Array is empty!"}
+	}
 	select {
 	case <-ctx.Done():
 		return nil, ctx.Err()
@@ -25,6 +28,9 @@ func (s *Server) CountOfUsers(ctx context.Context, req *api.CountOfUsersRequest)
 }
 
 func (s *Server) StreamCountOfUsers(req *api.CountOfUsersRequest, stream api.VKTest_StreamCountOfUsersServer) error {
+	if len(req.Array) == 0 {
+		return &internal.CustomError{Message: "Array is empty!"}
+	}
 	countArray := internal.NewIntArray()
 	boolArray := internal.NewBoolArray()
 	var wg sync.WaitGroup
