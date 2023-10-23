@@ -2,10 +2,9 @@ package server
 
 import (
 	"context"
-	"log"
 	"sync"
-	"vktest/internal"
 
+	"vktest/internal"
 	"vktest/vktest/api"
 )
 
@@ -13,47 +12,65 @@ type Server struct {
 }
 
 func (s *Server) CountOfUsers(ctx context.Context, req *api.CountOfUsersRequest) (*api.CountOfUsersResponse, error) {
-	res := s.calculateCountOfUsers(req.Array, req.AgeFrom, req.AgeTo)
-	return &api.CountOfUsersResponse{Count: res}, nil
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	default:
+		found, count := s.calculateCountOfUsers(req.Array, req.AgeFrom, req.AgeTo)
+		return &api.CountOfUsersResponse{
+			Found: found,
+			Count: count,
+		}, nil
+	}
 }
 
 func (s *Server) StreamCountOfUsers(req *api.CountOfUsersRequest, stream api.VKTest_StreamCountOfUsersServer) error {
+	countArray := internal.NewIntArray()
+	boolArray := internal.NewBoolArray()
 	var wg sync.WaitGroup
-	errChan := make(chan error)
 	arrays := arrayPartitioner(req.Array, internal.TenPartitions)
 	for _, v := range arrays {
 		wg.Add(1)
 		go func(array []int32) {
 			defer wg.Done()
-			err := stream.Send(&api.CountOfUsersResponse{Count: s.calculateCountOfUsers(req.Array, req.AgeTo, req.AgeFrom)})
-			if err != nil {
-				errChan <- err
-			}
+			found, count := s.calculateCountOfUsers(array, req.AgeFrom, req.AgeTo)
+			countArray.Append(int32(count))
+			boolArray.Append(found)
 		}(v)
 	}
 	wg.Wait()
-	if len(errChan) != 0 {
-		log.Fatal("Errors in concurrency calculation!")
-	}
-	return nil
+	err := stream.Send(&api.CountOfUsersResponse{
+		Found: boolArray.AnyTrue(),
+		Count: uint64(countArray.Sum()),
+	})
+	return err
 }
 
-func (s *Server) calculateCountOfUsers(array []int32, ageFrom, ageTo int32) uint64 {
-	var counter uint64
+func (s *Server) calculateCountOfUsers(array []int32, ageFrom, ageTo int32) (bool, uint64) {
+	var (
+		counter uint64
+		found   bool
+	)
 	if ageTo > ageFrom {
 		for _, v := range array {
 			if v <= ageTo && v >= ageFrom {
 				counter++
 			}
 		}
-		return counter
+		if counter > 0 {
+			found = true
+		}
+		return found, counter
 	}
 	for _, v := range array {
 		if v >= ageTo && v <= ageFrom {
 			counter++
 		}
 	}
-	return counter
+	if counter > 0 {
+		found = true
+	}
+	return found, counter
 }
 
 func arrayPartitioner(array []int32, countOfPartitions internal.PartitionsCount) [][]int32 {
