@@ -63,7 +63,7 @@ func TestPositive(t *testing.T) {
 	if err != nil {
 		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
-	if res.Count != 4 {
+	if *res.Count != 4 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -83,7 +83,7 @@ func TestBelowZero(t *testing.T) {
 	if err != nil {
 		t.Fatal("Cannot calculate count of users BelowZero Case: ", err)
 	}
-	if res.Count != 4 {
+	if *res.Count != 4 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -103,7 +103,7 @@ func TestInversive(t *testing.T) {
 	if err != nil {
 		t.Fatal("Cannot calculate count of users Inversion Case: ", err)
 	}
-	if res.Count != 4 {
+	if *res.Count != 4 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -142,7 +142,7 @@ func TestZeroLength(t *testing.T) {
 	if res.Found {
 		t.Fatal("Founded result, expected no one!")
 	}
-	if res.Count != 0 {
+	if *res.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -165,7 +165,7 @@ func TestZeroLengthEqualToNumberInArray(t *testing.T) {
 	if !res.Found {
 		t.Fatal("Found nothing! Expected at least something!")
 	}
-	if res.Count != 1 {
+	if *res.Count != 1 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -188,7 +188,7 @@ func TestNegative(t *testing.T) {
 	if res.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if res.Count != 0 {
+	if *res.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -211,7 +211,7 @@ func TestSearchLefterThenArraysBorder(t *testing.T) {
 	if res.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if res.Count != 0 {
+	if *res.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -234,7 +234,7 @@ func TestSearchRighterThenArraysBorder(t *testing.T) {
 	if res.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if res.Count != 0 {
+	if *res.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }

@@ -25,7 +25,7 @@ func TestStreamPositive(t *testing.T) {
 	if !res2.Found {
 		t.Fatal("Not found!")
 	}
-	if res2.Count != 4 {
+	if *res2.Count != 4 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -66,7 +66,7 @@ func TestStreamBelowZero(t *testing.T) {
 	if err2 != nil {
 		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
-	if res2.Count != 4 {
+	if *res2.Count != 4 {
 		t.Fatal("Incorrect calculation!")
 	}
 }
@@ -86,7 +86,7 @@ func TestStreamInversive(t *testing.T) {
 	if err2 != nil {
 		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
-	if res2.Count != 4 {
+	if *res2.Count != 4 {
 		t.Fatal("Result of calculation is incorrect!")
 	}
 }
@@ -126,7 +126,7 @@ func TestStreamZeroLength(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Founded result, expected no one!")
 	}
-	if res2.Count != 0 {
+	if *res2.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -150,7 +150,7 @@ func TestStreamZeroLengthEqualToNumberInArray(t *testing.T) {
 	if !res2.Found {
 		t.Fatal("Found nothing! Expected at least something!")
 	}
-	if res2.Count != 1 {
+	if *res2.Count != 1 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -172,7 +172,7 @@ func TestStreamNegative(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if res2.Count != 0 {
+	if *res2.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -195,7 +195,7 @@ func TestStreamSearchLefterThenArraysBorder(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if res2.Count != 0 {
+	if *res2.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -218,7 +218,7 @@ func TestStreamSearchRighterThenArraysBorder(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if res2.Count != 0 {
+	if *res2.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }

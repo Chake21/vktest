@@ -22,5 +22,5 @@ message CountOfUsersRequest {
 
 message CountOfUsersResponse {
   bool found = 1;
-  uint64 count = 2;
+  optional uint64 count = 2;
 }

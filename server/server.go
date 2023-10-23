@@ -20,9 +20,15 @@ func (s *Server) CountOfUsers(ctx context.Context, req *api.CountOfUsersRequest)
 		return nil, ctx.Err()
 	default:
 		found, count := s.calculateCountOfUsers(req.Array, req.AgeFrom, req.AgeTo)
+		if found {
+			return &api.CountOfUsersResponse{
+				Found: found,
+				Count: &count,
+			}, nil
+		}
 		return &api.CountOfUsersResponse{
 			Found: found,
-			Count: count,
+			Count: nil,
 		}, nil
 	}
 }
@@ -45,9 +51,17 @@ func (s *Server) StreamCountOfUsers(req *api.CountOfUsersRequest, stream api.VKT
 		}(v)
 	}
 	wg.Wait()
+	count := uint64(countArray.Sum())
+	if boolArray.AnyTrue() {
+		err := stream.Send(&api.CountOfUsersResponse{
+			Found: boolArray.AnyTrue(),
+			Count: &count,
+		})
+		return err
+	}
 	err := stream.Send(&api.CountOfUsersResponse{
 		Found: boolArray.AnyTrue(),
-		Count: uint64(countArray.Sum()),
+		Count: nil,
 	})
 	return err
 }
