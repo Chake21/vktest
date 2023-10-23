@@ -23,8 +23,8 @@ func main() {
 	s := grpc.NewServer()
 	api.RegisterVKTestServer(s, &server.Server{})
 	reflection.Register(s)
-	fmt.Println("Server запущен на ", port, " порту")
+	fmt.Println("Service starten at ", port, " port")
 	if err = s.Serve(lis); err != nil {
-		log.Fatal("ошибка при запуске сервера", err)
+		log.Fatal("Cant launch server: ", err)
 	}
 }
