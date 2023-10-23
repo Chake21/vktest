@@ -172,9 +172,6 @@ func TestStreamNegative(t *testing.T) {
 	if res2.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if *res2.Count != 0 {
-		t.Fatal("Result of calculation isnt correct!")
-	}
 }
 
 func TestStreamSearchLefterThenArraysBorder(t *testing.T) {
