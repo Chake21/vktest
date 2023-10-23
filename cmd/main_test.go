@@ -26,6 +26,26 @@ var (
 	ctx    = context.Background()
 )
 
+func TestSearch(t *testing.T) {
+	t.Parallel()
+	var (
+		res *api.CountOfUsersResponse
+		err error
+	)
+	req := api.CountOfUsersRequest{
+		Array:   internal.UsersAgeMocked,
+		AgeFrom: 0,
+		AgeTo:   1000,
+	}
+	res, err = client.CountOfUsers(ctx, &req)
+	if err != nil {
+		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+	}
+	if !res.Found {
+		t.Fatal("Result of searching isnt correct!")
+	}
+}
+
 func TestPositive(t *testing.T) {
 	t.Parallel()
 	var (
@@ -41,7 +61,7 @@ func TestPositive(t *testing.T) {
 	if err != nil {
 		t.Fatal("Cannot calculate count of users Positive Case: ", err)
 	}
-	if !(res.Count == 4) {
+	if res.Count != 4 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -61,7 +81,7 @@ func TestBelowZero(t *testing.T) {
 	if err != nil {
 		t.Fatal("Cannot calculate count of users BelowZero Case: ", err)
 	}
-	if !(res.Count == 4) {
+	if res.Count != 4 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -81,7 +101,7 @@ func TestInversive(t *testing.T) {
 	if err != nil {
 		t.Fatal("Cannot calculate count of users Inversion Case: ", err)
 	}
-	if !(res.Count == 4) {
+	if res.Count != 4 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -110,6 +130,29 @@ func TestZeroLength(t *testing.T) {
 	)
 	req := api.CountOfUsersRequest{
 		Array:   internal.UsersAgeMocked,
+		AgeFrom: 8,
+		AgeTo:   8,
+	}
+	res, err = client.CountOfUsers(ctx, &req)
+	if err != nil {
+		t.Fatal("Cannot calculate count of users ZeroLength Case: ", err)
+	}
+	if res.Found {
+		t.Fatal("Founded result, expected no one!")
+	}
+	if res.Count != 0 {
+		t.Fatal("Result of calculation isnt correct!")
+	}
+}
+
+func TestZeroLengthEqualToNumberInArray(t *testing.T) {
+	t.Parallel()
+	var (
+		res *api.CountOfUsersResponse
+		err error
+	)
+	req := api.CountOfUsersRequest{
+		Array:   internal.UsersAgeMocked,
 		AgeFrom: 3,
 		AgeTo:   3,
 	}
@@ -117,7 +160,10 @@ func TestZeroLength(t *testing.T) {
 	if err != nil {
 		t.Fatal("Cannot calculate count of users ZeroLength Case: ", err)
 	}
-	if !(res.Count == 1) {
+	if !res.Found {
+		t.Fatal("Found nothing! Expected at least something!")
+	}
+	if res.Count != 1 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
@@ -140,30 +186,53 @@ func TestNegative(t *testing.T) {
 	if res.Found {
 		t.Fatal("Found any results, expected no one!")
 	}
-	if !(res.Count == 0) {
+	if res.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
 
-func TestStreamPositive(t *testing.T) {
+func TestSearchLefterThenArraysBorder(t *testing.T) {
 	t.Parallel()
+	var (
+		res *api.CountOfUsersResponse
+		err error
+	)
 	req := api.CountOfUsersRequest{
-		Array:   internal.UsersAgeMocked,
-		AgeFrom: 2,
-		AgeTo:   8,
+		Array:   []int32{55, 66, 77, 88},
+		AgeFrom: 10,
+		AgeTo:   12,
 	}
-	cli, err := client.StreamCountOfUsers(ctx, &req)
+	res, err = client.CountOfUsers(ctx, &req)
 	if err != nil {
-		t.Fatal("Cannot calculate count of users Positive Case: ", err)
+		t.Fatal("Cannot calculate count of users border-left case: ", err)
 	}
-	res2, err2 := cli.Recv()
-	if err2 != nil {
-		t.Fatal("Cant read from stream", err)
+	if res.Found {
+		t.Fatal("Found any results, expected no one!")
 	}
-	if !res2.Found {
-		t.Fatal("Not found!")
+	if res.Count != 0 {
+		t.Fatal("Result of calculation isnt correct!")
 	}
-	if !(res2.Count == 4) {
+}
+
+func TestSearchRighterThenArraysBorder(t *testing.T) {
+	t.Parallel()
+	var (
+		res *api.CountOfUsersResponse
+		err error
+	)
+	req := api.CountOfUsersRequest{
+		Array:   []int32{55, 66, 77, 88},
+		AgeFrom: 90,
+		AgeTo:   100,
+	}
+	res, err = client.CountOfUsers(ctx, &req)
+	if err != nil {
+		t.Fatal("Cannot calculate count of users border-right case: ", err)
+	}
+	if res.Found {
+		t.Fatal("Found any results, expected no one!")
+	}
+	if res.Count != 0 {
 		t.Fatal("Result of calculation isnt correct!")
 	}
 }
